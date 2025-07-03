@@ -14,11 +14,10 @@ pipe = joblib.load(PIPE_PATH)
 # ------------------------------------------------------------
 FEATURES = [
     "Delivery_person_Age", "Delivery_person_Ratings", "Weather_conditions",
-    "Road_traffic_density", "Vehicle_condition", "Type_of_order",
+    "Road_traffic_density", "Type_of_order",
     "Type_of_vehicle", "multiple_deliveries", "Festival", "City",
-    "City_code", "day", "month", "quarter", "year", "day_of_week",
-    "is_month_start", "is_month_end", "is_quarter_start", "is_quarter_end",
-    "is_year_start", "is_year_end", "is_weekend", "order_prepare_time",
+    "day", "month", "year","is_month_start",
+     "is_weekend", "order_prepare_time",
     "distance"
 ]
 
