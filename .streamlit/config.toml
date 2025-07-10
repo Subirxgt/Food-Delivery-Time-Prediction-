@@ -1,7 +1,8 @@
 [server]
 headless = true
-port = 10000
 enableCORS = false
+port = $PORT
+
 
 [theme]
 base = "dark"           # 🔑 ADD THIS LINE → forces dark theme
