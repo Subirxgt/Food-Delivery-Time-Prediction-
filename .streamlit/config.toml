@@ -1,0 +1,12 @@
+[server]
+headless = true
+port = 10000
+enableCORS = false
+
+[theme]
+base = "dark"           # 🔑 ADD THIS LINE → forces dark theme
+primaryColor            = "#667eea"
+backgroundColor         = "#0F1419"
+secondaryBackgroundColor = "#1A202C"
+textColor               = "#E2E8F0"
+font                    = "sans serif"
