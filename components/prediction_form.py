@@ -11,7 +11,7 @@ def render_prediction_form():
     
     with col1:
         st.markdown("#### 👤 Delivery Person")
-        age = st.slider("Age", 18, 60, 30, help="Age of the delivery person")
+        age = st.slider("Age", 21, 50, 30, help="Age of the delivery person")
         rating = st.slider("Rating", 0.0, 5.0, 4.5, step=0.1, help="Average rating of the delivery person")
         
         st.markdown("#### 🌤️ Environment")
@@ -34,14 +34,14 @@ def render_prediction_form():
         order_type = st.selectbox("Order Type", 
                                  ["Snack", "Meal", "Drinks", "Buffet"],
                                  help="Type of food order")
-        prep_time = st.slider("Food Preparation Time (min)", 5, 60, 20,
+        prep_time = st.slider("Food Preparation Time (min)", 5, 20, 10,
                              help="Time needed to prepare the food")
         
         st.markdown("#### 📍 Location & Logistics")
         city = st.selectbox("City Type", 
                            ["Metropolitan", "Urban", "Semi-Urban"],
                            help="Type of city area")
-        distance = st.slider("Distance (km)", 1.0, 30.0, 5.0,
+        distance = st.slider("Distance (km)", 1.0, 25.0, 5.0,
                            help="Distance from restaurant to delivery location")
         multi_deliveries = st.slider("Multiple Deliveries", 0, 4, 0,
                                    help="Number of other deliveries in the same trip")
@@ -49,10 +49,10 @@ def render_prediction_form():
         st.markdown("#### 📅 Timing")
         festival = st.selectbox("Festival Season", ["Yes", "No"],
                                help="Is it festival season?")
-        hour = st.slider("Order Hour (24h format)", 0, 23, 13,
+        hour = st.slider("Order Hour (24h format)", 7, 23, 13,
                         help="Hour when the order was placed")
-        day = st.slider("Day of Month", 1, 31, 15,
-                       help="Day of the month")
+        day = st.slider("Day of Week", 0, 6, 3,
+                       help="Day of week")
         is_weekend = st.radio("Weekend?", [0, 1], 
                              format_func=lambda x: "Yes" if x == 1 else "No",
                              help="Is it a weekend?")
@@ -115,7 +115,7 @@ def get_preset_data(preset_type):
             "distance_km": 8.5,
             "prep_time_min": 25,
             "order_hour": 19,
-            "order_day": 15,
+            "order_day": 1,
             "is_weekend": 0
         },
         "morning": {
@@ -132,7 +132,7 @@ def get_preset_data(preset_type):
             "distance_km": 3.2,
             "prep_time_min": 15,
             "order_hour": 10,
-            "order_day": 15,
+            "order_day": 4,
             "is_weekend": 0
         },
         "bad_weather": {
@@ -149,7 +149,7 @@ def get_preset_data(preset_type):
             "distance_km": 6.8,
             "prep_time_min": 20,
             "order_hour": 14,
-            "order_day": 15,
+            "order_day": 5,
             "is_weekend": 1
         }
     }

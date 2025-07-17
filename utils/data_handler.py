@@ -39,6 +39,11 @@ def prepare_input_data(input_data, encoder, scaler):
         "City"
     ]
     
+
+    # Normalize categorical values to lowercase
+    for col in cat_cols:
+        input_data[col] = input_data[col].astype(str).str.lower().str.strip()
+
     # Encode categorical features
     encoded_data = encoder.transform(input_data[cat_cols])
     if hasattr(encoded_data, "toarray"):
@@ -66,13 +71,13 @@ def validate_input_data(data):
         issues.append("Missing values detected")
     
     # Check reasonable ranges
-    if data['distance_km'].iloc[0] < 0:
+    if data['distance_km'].iloc[0] < 0 or data['distance_km'].iloc[0] > 25:
         issues.append("Distance cannot be negative")
     
-    if data['prep_time_min'].iloc[0] < 0:
+    if data['prep_time_min'].iloc[0] < 0 or data['prep_time_min'].iloc[0] > 20:
         issues.append("Preparation time cannot be negative")
     
-    if data['Delivery_person_Age'].iloc[0] < 18 or data['Delivery_person_Age'].iloc[0] > 80:
+    if data['Delivery_person_Age'].iloc[0] < 21 or data['Delivery_person_Age'].iloc[0] > 50:
         issues.append("Delivery person age seems unrealistic")
     
     return issues

@@ -36,46 +36,49 @@ def generate_prediction_insights(input_data, prediction):
     elif distance < 3:
         insights.append(f"Short distance ({distance:.1f} km) helps reduce delivery time.")
     
+    # Normalize categorical values
+    weather = str(input_data['Weatherconditions'].iloc[0]).strip().lower()
+    traffic = str(input_data['Road_traffic_density'].iloc[0]).strip().lower()
+    vehicle = str(input_data['Type_of_vehicle'].iloc[0]).strip().lower()
+    festival = str(input_data['Festival'].iloc[0]).strip().lower()
+
     # Weather impact
-    weather = input_data['Weatherconditions'].iloc[0]
-    if weather in ['Stormy', 'Sandstorms']:
-        insights.append(f"Adverse weather ({weather}) may increase delivery time.")
-    elif weather == 'Sunny':
+    if weather in ['stormy', 'sandstorms']:
+        insights.append(f"Adverse weather ({weather.title()}) may increase delivery time.")
+    elif weather == 'sunny':
         insights.append("Good weather conditions favor faster delivery.")
-    
+
     # Traffic impact
-    traffic = input_data['Road_traffic_density'].iloc[0]
-    if traffic in ['High', 'Jam']:
-        insights.append(f"Heavy traffic ({traffic}) is likely to delay delivery.")
-    elif traffic == 'Low':
+    if traffic in ['high', 'jam']:
+        insights.append(f"Heavy traffic ({traffic.title()}) is likely to delay delivery.")
+    elif traffic == 'low':
         insights.append("Low traffic conditions help maintain optimal delivery time.")
-    
+
     # Time of day
     hour = input_data['order_hour'].iloc[0]
     if 12 <= hour <= 14 or 19 <= hour <= 21:
         insights.append(f"Peak ordering time ({hour}:00) may affect delivery speed.")
-    
+
     # Multiple deliveries
     multi_del = input_data['multiple_deliveries'].iloc[0]
     if multi_del > 1:
         insights.append(f"Multiple deliveries ({multi_del}) will increase total time.")
-    
+
     # Weekend effect
     is_weekend = input_data['is_weekend'].iloc[0]
     if is_weekend:
         insights.append("Weekend orders may have different delivery patterns.")
-    
+
     # Vehicle type
-    vehicle = input_data['Type_of_vehicle'].iloc[0]
-    if vehicle in ['Bicycle', 'Electric Bike']:
-        insights.append(f"{vehicle} may be slower but more eco-friendly.")
-    elif vehicle == 'Motorcycle':
+    if vehicle in ['bicycle', 'electric bike']:
+        insights.append(f"{vehicle.title()} may be slower but more eco-friendly.")
+    elif vehicle == 'motorcycle':
         insights.append("Motorcycle delivery offers good speed and flexibility.")
-    
+
     # Festival impact
-    festival = input_data['Festival'].iloc[0]
-    if festival == 'Yes':
+    if festival == 'yes':
         insights.append("Festival season may affect delivery times due to increased demand.")
+
     
     return insights
 
@@ -132,70 +135,77 @@ def generate_recommendations(input_data, prediction):
     """Generate recommendations to optimize delivery time"""
     recommendations = []
     
+    # Normalize categorical values
+    weather = str(input_data['Weatherconditions'].iloc[0]).strip().lower()
+    traffic = str(input_data['Road_traffic_density'].iloc[0]).strip().lower()
+    vehicle = str(input_data['Type_of_vehicle'].iloc[0]).strip().lower()
+
     # Distance-based recommendations
     distance = input_data['distance_km'].iloc[0]
     if distance > 10:
         recommendations.append("Consider using a faster vehicle for long distances.")
-    
+
     # Weather-based recommendations
-    weather = input_data['Weatherconditions'].iloc[0]
-    if weather in ['Stormy', 'Sandstorms', 'Fog']:
+    if weather in ['stormy', 'sandstorms', 'fog']:
         recommendations.append("Allow extra time for adverse weather conditions.")
         recommendations.append("Consider rescheduling during severe weather.")
-    
+
     # Traffic-based recommendations
-    traffic = input_data['Road_traffic_density'].iloc[0]
-    if traffic in ['High', 'Jam']:
+    if traffic in ['high', 'jam']:
         recommendations.append("Use traffic-aware routing to avoid congestion.")
         recommendations.append("Consider delivery during off-peak hours.")
-    
+
     # Time-based recommendations
     hour = input_data['order_hour'].iloc[0]
     if 12 <= hour <= 14 or 19 <= hour <= 21:
-        recommendations.append("Peak hours - consider pre-positioning delivery partners.")
-    
+        recommendations.append("Peak hours – consider pre-positioning delivery partners.")
+
     # Vehicle recommendations
-    vehicle = input_data['Type_of_vehicle'].iloc[0]
-    if vehicle == 'Bicycle' and distance > 5:
+    if vehicle == 'bicycle' and distance > 5:
         recommendations.append("Consider upgrading to a motorized vehicle for efficiency.")
-    
+
     # Multiple delivery optimization
     multi_del = input_data['multiple_deliveries'].iloc[0]
     if multi_del > 2:
         recommendations.append("Optimize delivery route to minimize total time.")
+
     
     return recommendations
 
 def calculate_efficiency_score(input_data, prediction):
     """Calculate an efficiency score for the delivery"""
     base_time = input_data['distance_km'].iloc[0] * 2  # Baseline: 2 minutes per km
-    
-    # Adjust for various factors
+
+    # Multipliers
     weather_multiplier = {
-        'Sunny': 1.0, 'Cloudy': 1.1, 'Windy': 1.2, 
-        'Stormy': 1.4, 'Sandstorms': 1.5, 'Fog': 1.3
+        'sunny': 1.0, 'cloudy': 1.1, 'windy': 1.2,
+        'stormy': 1.4, 'sandstorms': 1.5, 'fog': 1.3
     }
-    
+
     traffic_multiplier = {
-        'Low': 1.0, 'Medium': 1.2, 'High': 1.4, 'Jam': 1.8
+        'low': 1.0, 'medium': 1.2, 'high': 1.4, 'jam': 1.8
     }
-    
+
     vehicle_multiplier = {
-        'Motorcycle': 1.0, 'Scooter': 1.1, 'Electric Bike': 1.2, 'Bicycle': 1.5
+        'motorcycle': 1.0, 'scooter': 1.1, 'electric bike': 1.2, 'bicycle': 1.5
     }
-    
-    weather = input_data['Weatherconditions'].iloc[0]
-    traffic = input_data['Road_traffic_density'].iloc[0]
-    vehicle = input_data['Type_of_vehicle'].iloc[0]
-    
-    expected_time = base_time * weather_multiplier.get(weather, 1.2) * \
-                   traffic_multiplier.get(traffic, 1.2) * \
-                   vehicle_multiplier.get(vehicle, 1.2)
-    
-    # Add preparation time
+
+    # Normalize inputs
+    weather = str(input_data['Weatherconditions'].iloc[0]).strip().lower()
+    traffic = str(input_data['Road_traffic_density'].iloc[0]).strip().lower()
+    vehicle = str(input_data['Type_of_vehicle'].iloc[0]).strip().lower()
+
+    # Get multipliers safely
+    w_mult = weather_multiplier.get(weather, 1.2)
+    t_mult = traffic_multiplier.get(traffic, 1.2)
+    v_mult = vehicle_multiplier.get(vehicle, 1.2)
+
+    expected_time = base_time * w_mult * t_mult * v_mult
+
+    # Add prep time
     expected_time += input_data['prep_time_min'].iloc[0]
-    
-    # Calculate efficiency score (lower is better)
+
+    # Calculate efficiency score
     efficiency_score = min(100, max(0, 100 - abs(prediction - expected_time) / expected_time * 100))
     
     return efficiency_score

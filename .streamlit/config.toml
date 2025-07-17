@@ -2,14 +2,13 @@
 headless = true
 enableCORS = false
 enableXsrfProtection = false
-port = 8501
-
 
 
 [theme]
-base = "dark"           # 🔑 ADD THIS LINE → forces dark theme
-primaryColor            = "#667eea"
-backgroundColor         = "#0F1419"
+base = "dark"
+primaryColor = "#667eea"
+backgroundColor = "#0F1419"
 secondaryBackgroundColor = "#1A202C"
-textColor               = "#E2E8F0"
-font                    = "sans serif"
+textColor = "#E2E8F0"
+font = "sans serif"
+

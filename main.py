@@ -86,12 +86,12 @@ with tabs[0]:
     col1, col2 = st.columns([1, 1])
     
     with col1:
-        st.markdown('<div class="form-container">', unsafe_allow_html=True)
+        #st.markdown('<div class="form-container">', unsafe_allow_html=True)
         prediction_data = render_prediction_form()
         st.markdown('</div>', unsafe_allow_html=True)
     
     with col2:
-        st.markdown('<div class="results-container">', unsafe_allow_html=True)
+        #st.markdown('<div class="results-container">', unsafe_allow_html=True)
         
         if st.button("🔍 Predict Delivery Time", key="single_predict", help="Click to generate prediction"):
             with st.spinner("🤖 AI is analyzing your delivery parameters..."):

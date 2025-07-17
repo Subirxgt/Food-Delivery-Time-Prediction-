@@ -45,8 +45,8 @@ def render_scenario_comparison(encoder, scaler, model):
         col1, col2 = st.columns(2)
         
         with col1:
-            age = st.slider("Delivery Person Age", 18, 60, 30, key="scenario_age")
-            rating = st.slider("Delivery Person Rating", 0.0, 5.0, 4.5, step=0.1, key="scenario_rating")
+            age = st.slider("Delivery Person Age", 21, 50, 30, key="scenario_age")
+            rating = st.slider("Delivery Person Rating", 1.0, 5.0, 4.5, step=0.1, key="scenario_rating")
             weather = st.selectbox("Weather", ["Sunny", "Stormy", "Sandstorms", "Windy", "Cloudy", "Fog"], key="scenario_weather")
             traffic = st.selectbox("Traffic", ["Low", "Medium", "High", "Jam"], key="scenario_traffic")
             vehicle_condition = st.slider("Vehicle Condition", 0, 2, 1, key="scenario_vehicle_condition")
@@ -54,9 +54,9 @@ def render_scenario_comparison(encoder, scaler, model):
         with col2:
             order_type = st.selectbox("Order Type", ["Snack", "Meal", "Drinks", "Buffet"], key="scenario_order_type")
             vehicle_type = st.selectbox("Vehicle Type", ["Motorcycle", "Scooter", "Electric Bike", "Bicycle"], key="scenario_vehicle_type")
-            distance = st.slider("Distance (km)", 1.0, 30.0, 5.0, key="scenario_distance")
-            prep_time = st.slider("Prep Time (min)", 5, 60, 20, key="scenario_prep_time")
-            hour = st.slider("Order Hour", 0, 23, 13, key="scenario_hour")
+            distance = st.slider("Distance (km)", 1.0, 25.0, 5.0, key="scenario_distance")
+            prep_time = st.slider("Prep Time (min)", 5, 20, 10, key="scenario_prep_time")
+            hour = st.slider("Order Hour", 7, 23, 13, key="scenario_hour")
         
         col3, col4 = st.columns(2)
         with col3:
@@ -65,7 +65,7 @@ def render_scenario_comparison(encoder, scaler, model):
         
         with col4:
             festival = st.selectbox("Festival", ["Yes", "No"], key="scenario_festival")
-            day = st.slider("Day of Month", 1, 31, 15, key="scenario_day")
+            day = st.slider("Day of Week", 0, 6, 3, key="scenario_day")
             is_weekend = st.radio("Weekend?", [0, 1], format_func=lambda x: "Yes" if x == 1 else "No", key="scenario_weekend")
         
         if st.button("➕ Add Scenario", type="primary"):
@@ -134,12 +134,20 @@ def render_scenario_comparison(encoder, scaler, model):
 def create_scenario_data(name, age, rating, weather, traffic, vehicle_condition, 
                         order_type, vehicle_type, distance, prep_time, hour, 
                         city, multi_deliveries, festival, day, is_weekend):
-    """Create scenario data structure"""
+    """Create scenario data structure with standardized lowercase strings"""
     
-    data = pd.DataFrame([[
+    # Lowercase string inputs to match label-encoded training data
+    weather = weather.lower()
+    traffic = traffic.lower()
+    order_type = order_type.lower()
+    vehicle_type = vehicle_type.lower()
+    festival = festival.lower()
+    city = city.lower()
+    
+    data = pd.DataFrame([[ 
         age, rating, weather, traffic, vehicle_condition, order_type, vehicle_type,
         multi_deliveries, festival, city, distance, prep_time, hour, day, is_weekend
-    ]], columns=[
+    ]], columns=[ 
         "Delivery_person_Age", "Delivery_person_Ratings", "Weatherconditions", "Road_traffic_density",
         "Vehicle_condition", "Type_of_order", "Type_of_vehicle", "multiple_deliveries",
         "Festival", "City", "distance_km", "prep_time_min", "order_hour", "order_day", "is_weekend"
@@ -151,6 +159,7 @@ def create_scenario_data(name, age, rating, weather, traffic, vehicle_condition,
         'prediction': None,
         'confidence': None
     }
+
 
 def add_preset_scenario(preset_type):
     """Add preset scenario to comparison"""
@@ -164,28 +173,28 @@ def add_preset_scenario(preset_type):
             "age": 28, "rating": 4.3, "weather": "Cloudy", "traffic": "High",
             "vehicle_condition": 1, "order_type": "Meal", "vehicle_type": "Motorcycle",
             "distance": 8.5, "prep_time": 25, "hour": 19, "city": "Metropolitan",
-            "multi_deliveries": 1, "festival": "No", "day": 15, "is_weekend": 0
+            "multi_deliveries": 1, "festival": "No", "day": 1, "is_weekend": 0
         },
         "morning": {
             "name": "Morning Order",
             "age": 25, "rating": 4.6, "weather": "Sunny", "traffic": "Low",
             "vehicle_condition": 2, "order_type": "Snack", "vehicle_type": "Scooter",
             "distance": 3.2, "prep_time": 15, "hour": 10, "city": "Urban",
-            "multi_deliveries": 0, "festival": "No", "day": 15, "is_weekend": 0
+            "multi_deliveries": 0, "festival": "No", "day": 5, "is_weekend": 0
         },
         "bad_weather": {
             "name": "Bad Weather",
             "age": 32, "rating": 4.4, "weather": "Stormy", "traffic": "Medium",
             "vehicle_condition": 1, "order_type": "Meal", "vehicle_type": "Motorcycle",
             "distance": 6.8, "prep_time": 20, "hour": 14, "city": "Metropolitan",
-            "multi_deliveries": 0, "festival": "No", "day": 15, "is_weekend": 1
+            "multi_deliveries": 0, "festival": "No", "day": 3, "is_weekend": 1
         },
         "festival": {
             "name": "Festival Rush",
             "age": 30, "rating": 4.2, "weather": "Sunny", "traffic": "Jam",
             "vehicle_condition": 1, "order_type": "Buffet", "vehicle_type": "Scooter",
             "distance": 7.5, "prep_time": 35, "hour": 20, "city": "Metropolitan",
-            "multi_deliveries": 2, "festival": "Yes", "day": 15, "is_weekend": 1
+            "multi_deliveries": 2, "festival": "Yes", "day": 2, "is_weekend": 1
         }
     }
     

@@ -61,12 +61,13 @@ def create_factor_analysis(data):
     categories = ['Weather', 'Traffic', 'Order Type', 'Vehicle Type', 'City', 'Festival']
     
     # Map categorical values to scores
-    weather_scores = {'Sunny': 5, 'Cloudy': 4, 'Windy': 3, 'Stormy': 2, 'Sandstorms': 1, 'Fog': 2}
-    traffic_scores = {'Low': 5, 'Medium': 3, 'High': 2, 'Jam': 1}
-    order_scores = {'Snack': 5, 'Drinks': 4, 'Meal': 3, 'Buffet': 2}
-    vehicle_scores = {'Bicycle': 2, 'Electric Bike': 3, 'Scooter': 4, 'Motorcycle': 5}
-    city_scores = {'Semi-Urban': 5, 'Urban': 3, 'Metropolitan': 2}
-    festival_scores = {'No': 5, 'Yes': 2}
+    weather_scores = {'sunny': 5, 'cloudy': 4, 'windy': 3, 'stormy': 2, 'sandstorms': 1, 'fog': 2}
+    traffic_scores = {'low': 5, 'medium': 3, 'high': 2, 'jam': 1}
+    order_scores = {'snack': 5, 'drinks': 4, 'meal': 3, 'buffet': 2}
+    vehicle_scores = {'bicycle': 2, 'electric bike': 3, 'scooter': 4, 'motorcycle': 5}
+    city_scores = {'semi-urban': 5, 'urban': 3, 'metropolitan': 2}
+    festival_scores = {'no': 5, 'yes': 2}
+
     
     values = [
         weather_scores.get(data['Weatherconditions'].iloc[0], 3),
